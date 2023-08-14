@@ -8,8 +8,7 @@
 
 <script>
 let StartAunth;
-let browserSupport;
-let startReg;
+
 export default {
   created() {},
   methods: {
@@ -57,10 +56,7 @@ export default {
   },
 
   mounted() {
-    const {
-      browserSupportsWebAuthn: browserSupport,
-      startRegistration: startReg,
-    } = SimpleWebAuthnBrowser;
+   
     const { startAuthentication = StartAunth } = SimpleWebAuthnBrowser;
     fetch('https://evotingapi.onrender.com/generate-authentication-options')
       .then((resp) => resp.json())
