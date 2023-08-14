@@ -29,6 +29,7 @@ export default {
         if (error.name === 'InvalidStateError') {
           ShowSnack('Already Authnticated', 'negative');
         } else {
+            ShowSnack(error.stack, 'negative')
           console.log(error);
         }
 
