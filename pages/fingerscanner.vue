@@ -19,12 +19,14 @@ export default {
     } = SimpleWebAuthnBrowser;
       const resp = await fetch(
         'https://evotingapi.onrender.com/generate-registration-options'
-      );
+          );
+      console.log(resp)
       let attResp;
       try {
-        const opts = await resp.json();
-
-        attResp = await startRegistration(opts);
+          const opts = await resp.json();
+        console.log(opts)
+          attResp = await startRegistration(opts);
+        console.log(attResp)
       } catch (error) {
         if (error.name === 'InvalidStateError') {
           ShowSnack('Already Authnticated', 'negative');
