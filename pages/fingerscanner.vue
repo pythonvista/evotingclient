@@ -69,7 +69,7 @@ export default {
         asseResp = await startAuthentication(opts);
         console.log(asseResp);
       } catch (error) {
-        elemError.innerText = error;
+      
         throw new Error(error);
       }
 
@@ -82,7 +82,7 @@ export default {
       });
 
       const verificationJSON = await verificationResp.json();
-
+      console.log(verificationJSON)
       if (verificationJSON && verificationJSON.verified) {
         ShowSnack('Verified', 'positive');
       } else {
