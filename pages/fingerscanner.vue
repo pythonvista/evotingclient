@@ -3,7 +3,7 @@
     verify finger
 
     <q-btn @click="Register">Register</q-btn>
-        <q-btn @click="Login">Login</q-btn>
+    <q-btn @click="Login">Login</q-btn>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   created() {},
   methods: {
     async Register() {
+      let opts;
       const { browserSupportsWebAuthn, startRegistration } =
         SimpleWebAuthnBrowser;
       const resp = await fetch(
@@ -22,7 +23,7 @@ export default {
       console.log(resp);
       let attResp;
       try {
-        const opts = await resp.json();
+        opts = await resp.json();
         console.log(opts);
         attResp = await startRegistration(opts);
         console.log(attResp);
@@ -43,7 +44,10 @@ export default {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...attResp, currentChallenge: opts.challenge }),
+          body: JSON.stringify({
+            ...attResp,
+            currentChallenge: opts.challenge,
+          }),
         }
       );
 
@@ -61,9 +65,9 @@ export default {
       let asseResp;
       try {
         const opts = await resp.json();
-        console.log(opts)
+        console.log(opts);
         asseResp = await startAuthentication(opts);
-        console.log(asseResp)
+        console.log(asseResp);
       } catch (error) {
         elemError.innerText = error;
         throw new Error(error);
