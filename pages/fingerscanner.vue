@@ -62,7 +62,7 @@ export default {
     },
     async Login() {
       const { startAuthentication } = SimpleWebAuthnBrowser;
-      
+
       const resp = await fetch('/generate-authentication-options');
       let asseResp;
       try {
@@ -75,7 +75,7 @@ export default {
         throw new Error(error);
       }
 
-      const verificationResp = await fetch('/verify-authentication', {
+      const verificationResp = await fetch('https://evotingapi.onrender.com/verify-authentication', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
