@@ -49,6 +49,7 @@ export default {
       );
 
       const verificationJSON = await verificationResp.json();
+      console.log(verificationJSON)
 
       if (verificationJSON && verificationJSON.verified) {
         ShowSnack('Authnticated', 'positive');
