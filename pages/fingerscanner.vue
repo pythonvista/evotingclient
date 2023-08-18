@@ -3,6 +3,7 @@
     verify finger
 
     <q-btn @click="Register">Register</q-btn>
+        <q-btn @click="Login">Login</q-btn>
   </div>
 </template>
 
@@ -12,26 +13,24 @@ let StartAunth;
 export default {
   created() {},
   methods: {
-      async Register() {
-        const {
-      browserSupportsWebAuthn,
-      startRegistration,
-    } = SimpleWebAuthnBrowser;
+    async Register() {
+      const { browserSupportsWebAuthn, startRegistration } =
+        SimpleWebAuthnBrowser;
       const resp = await fetch(
         'https://evotingapi.onrender.com/generate-registration-options'
-          );
-      console.log(resp)
+      );
+      console.log(resp);
       let attResp;
       try {
-          const opts = await resp.json();
-        console.log(opts)
-          attResp = await startRegistration(opts);
-        console.log(attResp)
+        const opts = await resp.json();
+        console.log(opts);
+        attResp = await startRegistration(opts);
+        console.log(attResp);
       } catch (error) {
         if (error.name === 'InvalidStateError') {
           ShowSnack('Already Authnticated', 'negative');
         } else {
-            ShowSnack(error.stack, 'negative')
+          ShowSnack(error.stack, 'negative');
           console.log(error);
         }
 
@@ -49,7 +48,7 @@ export default {
       );
 
       const verificationJSON = await verificationResp.json();
-      console.log(verificationJSON)
+      console.log(verificationJSON);
 
       if (verificationJSON && verificationJSON.verified) {
         ShowSnack('Authnticated', 'positive');
@@ -57,10 +56,38 @@ export default {
         ShowSnack('Not Aunticated', 'negative');
       }
     },
+    async Login() {
+      const resp = await fetch('/generate-authentication-options');
+      let asseResp;
+      try {
+        const opts = await resp.json();
+        console.log(opts)
+        asseResp = await startAuthentication(opts);
+        console.log(asseResp)
+      } catch (error) {
+        elemError.innerText = error;
+        throw new Error(error);
+      }
+
+      const verificationResp = await fetch('/verify-authentication', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(asseResp),
+      });
+
+      const verificationJSON = await verificationResp.json();
+
+      if (verificationJSON && verificationJSON.verified) {
+        ShowSnack('Verified', 'positive');
+      } else {
+        ShowSnack('Unverified', 'negative');
+      }
+    },
   },
 
   mounted() {
-   
     const { startAuthentication = StartAunth } = SimpleWebAuthnBrowser;
     fetch('https://evotingapi.onrender.com/generate-authentication-options')
       .then((resp) => resp.json())
