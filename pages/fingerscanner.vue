@@ -63,7 +63,7 @@ export default {
     async Login() {
       const { startAuthentication } = SimpleWebAuthnBrowser;
 
-      const resp = await fetch('/generate-authentication-options');
+      const resp = await fetch('https://evotingapi.onrender.com/generate-authentication-options');
       let asseResp;
       try {
         const opts = await resp.json();
