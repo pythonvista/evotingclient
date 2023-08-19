@@ -5,7 +5,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Temitope Facial Verification',
+      title: 'E-voting Biometric Verification',
       meta: [
         {
           name: 'description',
