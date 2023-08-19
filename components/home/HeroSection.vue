@@ -2,7 +2,7 @@
   <div class="">
   
 
-    <section class="relative pt-12 overflow-hidden bg-black sm:pt-16">
+    <section class="relative pt-12 min-h-screen overflow-hidden bg-black sm:pt-16">
       <div class="relative px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div class="max-w-4xl mx-auto text-center">
           <p class="text-sm font-normal tracking-widest uppercase">
