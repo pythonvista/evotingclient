@@ -39,18 +39,18 @@ import {
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const firebaseConfig = {
-    apiKey: 'AIzaSyCi1spUi5fiD8eVNnliw_bJ_LyuSwEWlgI',
-    authDomain: 'votingapp-a4b3b.firebaseapp.com',
-    projectId: 'votingapp-a4b3b',
-    storageBucket: 'votingapp-a4b3b.appspot.com',
-    messagingSenderId: '738195292437',
-    appId: '1:738195292437:web:b2e70ec775e013a594e91c',
+    apiKey: 'AIzaSyD0SF4gj5rvaTFjhhPncyrcsBLzkYgzt0s',
+    authDomain: 'voting-system-77857.firebaseapp.com',
+    projectId: 'voting-system-77857',
+    storageBucket: 'voting-system-77857.appspot.com',
+    messagingSenderId: '598743398422',
+    appId: '1:598743398422:web:df57734545741f51989d37',
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
-  
+
   function AuthFunc() {
     this.signup = (email, password) => {
       let data = createUserWithEmailAndPassword(auth, email, password);
@@ -72,7 +72,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
     this.Phone = (phone, appVerifier) => {
       const res = signInWithPhoneNumber(auth, phone, appVerifier);
-      console.log(res)
+      console.log(res);
       return res;
     };
 
@@ -188,7 +188,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
       return q;
     };
     this.CollectionsSnap = (dbname) => {
-      const q =  collection(db, dbname)
+      const q = collection(db, dbname);
       return q;
     };
     this.SnapDoc = (dbname, userId) => {

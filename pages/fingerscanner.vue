@@ -20,11 +20,10 @@ export default {
       const resp = await fetch(
         'https://evotingapi.onrender.com/generate-registration-options'
       );
-      console.log(resp);
+    
       let attResp;
       try {
         opts = await resp.json();
-        console.log(opts);
         attResp = await startRegistration(opts);
         console.log(attResp);
       } catch (error) {
@@ -54,6 +53,8 @@ export default {
       const verificationJSON = await verificationResp.json();
       console.log(verificationJSON);
 
+      console.log('thats the end of register and start of login')
+
       if (verificationJSON && verificationJSON.verified) {
         ShowSnack('Authnticated', 'positive');
       } else {
@@ -67,9 +68,10 @@ export default {
       let asseResp;
       try {
          opts = await resp.json();
-        console.log(opts);
+        
         asseResp = await startAuthentication(opts);
- 
+
+        console.log(asseResp)
       } catch (error) {
       
         throw new Error(error);

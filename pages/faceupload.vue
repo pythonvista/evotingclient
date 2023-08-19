@@ -1,5 +1,9 @@
 <template>
-  <div
+  <div v-if="veri == 'start'" class="verification">
+    
+
+  </div>
+  <div v-if="veri == 'face'"
     class="bg-slate-300 min-h-screen flex flex-col gap-4 justify-center items-center"
   >
     <p class="text-xl font-bold">Face Verification Setup</p>
@@ -17,6 +21,9 @@
       </template></q-btn
     >
   </div>
+  <div v-if="veri == 'finger'">
+
+  </div>
 </template>
 
 <script>
@@ -26,7 +33,8 @@ let nuxt;
 let store
 export default {
   data: () => ({
-   load: false 
+    load: false,
+   veri: 'start'
   }),
   mounted() {
     Webcam.set({
