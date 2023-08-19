@@ -1,9 +1,7 @@
 <template>
-  <div v-if="veri == 'start'" class="verification">
-    
-
-  </div>
-  <div v-if="veri == 'face'"
+  <div v-if="veri == 'start'" class="verification"></div>
+  <div
+    v-if="veri == 'face'"
     class="bg-slate-300 min-h-screen flex flex-col gap-4 justify-center items-center"
   >
     <p class="text-xl font-bold">Face Verification Setup</p>
@@ -21,47 +19,33 @@
       </template></q-btn
     >
   </div>
-  <div v-if="veri == 'finger'">
-
-  </div>
+  <div v-if="veri == 'finger'"></div>
 </template>
 
 <script>
 let crud;
 let upload;
 let nuxt;
-let store
+let store;
 export default {
   data: () => ({
     load: false,
-   veri: 'start'
+    veri: 'start',
   }),
-  mounted() {
-    Webcam.set({
-      width: 250,
-      height: 250,
-      image_format: 'jpeg',
-      jpeg_quality: 90,
-    });
-
-    Webcam.attach('camera');
-  },
+  mounted() {},
   methods: {
     async StartVerification() {
-      this.load = true
+      this.load = true;
       Webcam.snap(async (data_uri) => {
         try {
           const imgfile = this.dataURItoBlob(data_uri);
-          const res = await upload(
-            imgfile,
-            `${this.activeUser}_verify_img`
-          );
-          await crud.updateDocument('USERS',  this.activeUser, {
+          const res = await upload(imgfile, `${this.activeUser}_verify_img`);
+          await crud.updateDocument('USERS', this.activeUser, {
             biometrics: { scan1Uri: data_uri, url: res.url, path: res.path },
           });
-          ShowSnack('Validation Successfull', 'positive')
-          this.$router.push({path: '/elections'})
-          this.load = false
+          ShowSnack('Validation Successfull', 'positive');
+          this.$router.push({ path: '/elections' });
+          this.load = false;
         } catch (err) {
           console.log(err);
         }
@@ -75,15 +59,32 @@ export default {
       }
       return new Blob([new Uint8Array(array)], { type: 'image/jpeg' });
     },
+    MountCamera() {
+      Webcam.set({
+        width: 250,
+        height: 250,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+      });
+
+      Webcam.attach('camera');
+    },
+    EnableFaceUpload() {
+      this.veri = 'face'
+      this.MountCamera()
+    },
+    EnableFinger() {
+      this.veri = 'finger'
+    }
   },
   computed: {
     activeUser() {
-      return store.activeUser
-    }  
+      return store.activeUser;
+    },
   },
   created() {
     let nuxt = useNuxtApp();
-    store = useLoungeStore()
+    store = useLoungeStore();
     upload = nuxt.$UploadImg;
     crud = nuxt.$crud;
   },
