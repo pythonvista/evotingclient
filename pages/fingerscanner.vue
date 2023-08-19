@@ -69,7 +69,7 @@ export default {
         const opts = await resp.json();
         console.log(opts);
         asseResp = await startAuthentication(opts);
-        console.log(asseResp);
+ 
       } catch (error) {
       
         throw new Error(error);
@@ -80,7 +80,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(asseResp),
+        body: JSON.stringify({ ...asseResp, currentChallenge: opts.challenge, }),
       });
 
       const verificationJSON = await verificationResp.json();
