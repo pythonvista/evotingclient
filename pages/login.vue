@@ -77,7 +77,7 @@
         <div class="flex justify-center mx-auto">
           <img
             class="w-auto h-7 sm:h-8"
-            src="@/assets/images/logo/fuoye-logo.png"
+            src="@/assets/images/logo/images.jpg"
             alt=""
           />
         </div>

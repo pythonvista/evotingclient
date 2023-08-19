@@ -6,7 +6,7 @@
         <img
           width="40"
           class="navbar-brand-fuoye-logo"
-          src="@/assets/images/logo/fuoye-logo.png"
+          src="@/assets/images/logo/images.jpg"
           alt="Logo"
         />
       </a>
