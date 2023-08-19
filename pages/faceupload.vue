@@ -1,5 +1,7 @@
 <template>
-  <div v-if="veri == 'start'" class="verification"></div>
+  <div v-if="veri == 'start'" class="verification min-h-screen flex justify-center flex-col items-center ">
+    <p class="text-xl font-serif font-bold text-center">Select Verification Type</p>
+  </div>
   <div
     v-if="veri == 'face'"
     class="bg-slate-300 min-h-screen flex flex-col gap-4 justify-center items-center"

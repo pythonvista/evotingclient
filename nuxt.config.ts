@@ -55,7 +55,7 @@ export default defineNuxtConfig({
           async: true,
         },
         {
-          src: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js',
+          src: 'https://cdn.lordicon.com/bhenfmcm.js',
           type: 'text/javascript',
           crossorigin: '',
           async: true,
