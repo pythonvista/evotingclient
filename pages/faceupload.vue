@@ -11,7 +11,6 @@
     </p>
     <div class="flex justify-center items-center gap-3">
       <div
-        @click="EnableFinger"
         class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
       >
         <lord-icon
