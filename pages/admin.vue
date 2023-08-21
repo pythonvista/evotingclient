@@ -25,7 +25,7 @@
     <q-btn @click="OpenCont">Add Contestant</q-btn>
 
     <q-dialog v-model="ele">
-      <div class="bg-white p-3 flex flex-col justify-center items-center gap-4">
+      <div class="bg-white p-3 flex flex-col justify-center items-center gap-2">
         <p class="rexr-3xl font-bold">Add Election</p>
         <p>Election Id: {{ election.id }}</p>
         <input
@@ -63,7 +63,7 @@
       </div>
     </q-dialog>
     <q-dialog v-model="pls">
-      <div class="bg-white p-3 flex flex-col justify-center items-center gap-4">
+      <div class="bg-white p-3 flex flex-col justify-center items-center gap-2">
         <p class="rexr-3xl font-bold">Add Pools</p>
         <p>Pools Id: {{ polls.id }}</p>
         <input
