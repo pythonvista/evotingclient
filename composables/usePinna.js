@@ -8,6 +8,7 @@ export const useLoungeStore = defineStore({
       activeUser: '',
       userData: {},
       isScanned: false,
+      fingerprint: '',
       routeState: '',
       phone: '',
       nav: false,
@@ -349,6 +350,9 @@ export const useLoungeStore = defineStore({
     },
     SetScan(v) {
       this.isScanned = v;
+    },
+    SetFinger(v) {
+      this.fingerprint = v;
     },
     SetNav(data) {
       this.nav = data;

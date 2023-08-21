@@ -134,6 +134,7 @@ export default {
       console.log(verificationJSON);
       if (verificationJSON && verificationJSON.verified) {
         store.SetScan(true);
+        store.SetFinger(verificationJSON.verified);
         ShowSnack('User Verified', 'positive');
         this.$router.push({ path: '/elections' });
       } else {
