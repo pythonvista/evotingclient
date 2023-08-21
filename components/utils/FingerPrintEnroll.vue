@@ -91,6 +91,7 @@ export default {
             url: attResp.id,
             path: attResp.id,
           },
+          biofin: attResp.id
         });
         ShowSnack('Validation Successfull', 'positive');
         this.$router.push({ path: '/elections' });
