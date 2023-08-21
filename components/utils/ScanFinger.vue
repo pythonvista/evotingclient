@@ -133,13 +133,17 @@ export default {
       const verificationJSON = await verificationResp.json();
       console.log(verificationJSON);
       if (verificationJSON && verificationJSON.verified) {
-        console.log(asseResp.id);
-          const user = await crud.getAllQueryDoc('USERS', 'biofin', asseResp.id);
-        console.log(user)
-        store.SetScan(true);
-        store.SetFinger(asseResp.id);
-        ShowSnack('User Verified', 'positive');
-        this.$router.push({ path: '/elections' });
+       
+        const user = await crud.getAllQueryDoc('USERS', 'biofin', asseResp.id);
+      
+        if (user.length > 0 && user[0].biofin == asseResp.id) {
+          store.SetScan(true);
+          store.SetFinger(asseResp.id);
+          ShowSnack('User Verified', 'positive');
+          this.$router.push({ path: '/elections' });
+        } else {
+          ShowSnack('Active User Not Verified', 'negative');
+        }
       } else {
         ShowSnack('Unverified', 'negative');
         ShowSnack('User Not Verified', 'negative');
