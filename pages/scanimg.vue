@@ -73,14 +73,7 @@ export default {
     user: {},
   }),
   mounted() {
-    Webcam.set({
-      width: 250,
-      height: 250,
-      image_format: 'jpeg',
-      jpeg_quality: 90,
-    });
-
-    Webcam.attach('camera');
+   
   },
   methods: {
     async StartVerification() {
