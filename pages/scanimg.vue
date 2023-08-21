@@ -73,7 +73,7 @@ export default {
     user: {},
   }),
   mounted() {
-   
+    this.CheckValidation();
   },
   methods: {
     async StartVerification() {
@@ -117,7 +117,7 @@ export default {
     },
     async CheckValidation() {
       try {
-        console.log(this.activeUser)
+      console.log(this.activeUser)
       const doc = await crud.getSingleDoc('USERS', this.activeUser);
       this.user = doc.data();
       if (!this.user?.biometrics?.scan1Uri) {
@@ -162,8 +162,9 @@ export default {
     store = useLoungeStore();
     upload = nuxt.$UploadImg;
     crud = nuxt.$crud;
-    this.CheckValidation();
+   
   },
+ 
   setup() {
     definePageMeta({
       layout: 'home',
