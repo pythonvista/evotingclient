@@ -1,5 +1,42 @@
 <template>
   <div
+    v-if="veri == 'start'"
+    class="verification min-h-screen flex gap-3 justify-center flex-col items-center"
+  >
+    <p class="text-xl font-serif font-bold text-center">
+      Biometric Verification
+    </p>
+    <p class="text-md font-serif font-bold text-center">
+      Select Verification Type
+    </p>
+    <div class="flex justify-center items-center gap-3">
+      <div
+      @click="EnableFinger"
+        class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
+      >
+        <lord-icon
+          src="https://cdn.lordicon.com/rqqkvjqf.json"
+          trigger="hover"
+          colors="primary:#121331,secondary:#08a88a"
+          style="width: 100%; height: 100%"
+        >
+        </lord-icon>
+      </div>
+      <div
+        @click="EnableFaceUpload"
+        class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
+      >
+        <img
+          class="w-full object-cover h-full"
+          src="@/assets/images/faceveri.gif"
+          alt=""
+        />
+      </div>
+      <div></div>
+    </div>
+  </div>
+  <div
+   v-if="veri == 'face'"
     class="bg-slate-300 min-h-screen flex flex-col gap-4 justify-center items-center"
   >
     <p class="text-xl font-bold">Verify Biometrics</p>
@@ -17,6 +54,9 @@
       </template></q-btn
     >
   </div>
+   <div v-if="veri == 'finger'">
+  <utils-scan-finger></utils-scan-finger>
+  </div>
 </template>
 
 <script>
@@ -28,6 +68,7 @@ export default {
   data: () => ({
     load: false,
     userData: {},
+    veri: 'start',
     uid: '',
     user: {},
   }),
@@ -94,6 +135,25 @@ export default {
         console.log(err)
       }
       
+    },
+    MountCamera() {
+      Webcam.set({
+        width: 250,
+        height: 250,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+      });
+
+      Webcam.attach('camera');
+    },
+    EnableFaceUpload() {
+      this.veri = 'face';
+      setTimeout(() => {
+        this.MountCamera();
+      }, 5000);
+    },
+    EnableFinger() {
+      this.veri = 'finger';
     },
   },
   computed: {

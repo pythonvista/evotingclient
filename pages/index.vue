@@ -1,5 +1,5 @@
 <template>
-<div>
+<div >
   <home-hero-section></home-hero-section>
   
 </div>
