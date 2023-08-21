@@ -105,7 +105,7 @@ export default {
           this.loading = false;
         } else {
           this.loading = false;
-          ShowSnack('Facial Validation Required', 'negative');
+          ShowSnack('Biometric Validation Required', 'negative');
           this.$router.push({ path: '/scanimg' });
         }
       } catch (err) {
