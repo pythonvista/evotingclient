@@ -173,7 +173,7 @@ export default {
         const result = await confirmationResult.confirm(this.otp);
         const user = result.user;
         store.SetActiveUser(user.phoneNumber, true);
-        const doc = await crud.getSingleDoc('', user.phoneNumber);
+        const doc = await crud.getSingleDoc('USERS', user.phoneNumber);
         store.SetUserData(doc.data());
         this.loading2 = false;
         this.otpbox = false;
