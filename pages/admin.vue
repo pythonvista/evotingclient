@@ -249,7 +249,7 @@ let crud;
 let store;
 export default {
   data: () => ({
-    logged: true,
+    logged: false,
     loaders: [],
     username: '',
     allVotes: [],
