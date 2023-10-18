@@ -113,7 +113,7 @@ export default {
       this.user = doc.data();
       if (!this.user?.biometrics?.scan1Uri) {
         this.$router.push({ path: '/faceupload' });
-        ShowSnack('Face Biometrics Not Uploaded', 'negative')
+        ShowSnack('Fingerprint Biometrics Not Uploaded', 'negative')
       }
       } catch (err) {
         console.log(err)
