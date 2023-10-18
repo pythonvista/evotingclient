@@ -22,16 +22,7 @@
         >
         </lord-icon>
       </div>
-      <div
-        @click="EnableFaceUpload"
-        class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
-      >
-        <img
-          class="w-full object-cover h-full"
-          src="@/assets/images/faceveri.gif"
-          alt=""
-        />
-      </div>
+     
       <div></div>
     </div>
   </div>
