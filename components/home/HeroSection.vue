@@ -50,6 +50,13 @@
             >
               Elections
             </a>
+            <a
+               @click="$router.push({path: '/results'})"
+              class="inline-flex items-center justify-center w-full px-8 py-3 text-base font-normal text-white transition-all duration-200 bg-black border-blue-600 border-solid border-2 rounded-full sm:w-auto hover:border-white"
+              role="button"
+            >
+              Results
+            </a>
           </div>
         </div>
 
