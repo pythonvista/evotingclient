@@ -39,12 +39,12 @@ import {
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const firebaseConfig = {
-    apiKey: 'AIzaSyD0SF4gj5rvaTFjhhPncyrcsBLzkYgzt0s',
-    authDomain: 'voting-system-77857.firebaseapp.com',
-    projectId: 'voting-system-77857',
-    storageBucket: 'voting-system-77857.appspot.com',
-    messagingSenderId: '598743398422',
-    appId: '1:598743398422:web:df57734545741f51989d37',
+    apiKey: 'AIzaSyDiweJPAg6rqRU5B37sCFh9G-FKQV9PNqQ',
+    authDomain: 'medfestcare-5f2be.firebaseapp.com',
+    projectId: 'medfestcare-5f2be',
+    storageBucket: 'medfestcare-5f2be.firebasestorage.app',
+    messagingSenderId: '563387407605',
+    appId: '1:563387407605:web:259a1c34575294443eb9bc',
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
