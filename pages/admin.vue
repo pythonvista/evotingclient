@@ -79,8 +79,9 @@
         />
         <div class="w-full px-4">
           <q-select
+          emit-value
           label="Select Election"
-          :options="allElection.map((m) => `${m.id} ${m.title}` )"
+          :options="allElection.map((m) => ({label: `${m.id} ${m.title}`, value: v.id} )"
          class="w-full"
           v-model="polls.electionid"
         ></q-select>
@@ -115,7 +116,8 @@
 
         <q-select
           label="Select Pools"
-          :options="allPools.map((m) => `${m.id} ${m.title}`)"
+          emit-value
+          :options="allPools.map((m) => ({label: `${m.id} ${m.title}`, value: v.id}) )"
           class="w-full"
           v-model="contestant.pollsid"
         ></q-select>
