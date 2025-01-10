@@ -61,6 +61,8 @@ export const RegisterAuth = async (docid, fullname) => {
       rp: {
         name: "evotingclient.vercel.app",
         id: "evotingclient.vercel.app",
+        // name: "localhost",
+        // id: "localhost",
       },
       user: {
         id: Uint8Array.from(docid, (c) => c.charCodeAt(0)),
@@ -105,6 +107,7 @@ export const RegisterAuth = async (docid, fullname) => {
     let pubKeyByte = arrayBufferToBase64(publicKeyBytes);
     await crud.updateDocument('USERS', docid, { credentialId: crednBytes, publicKeyBytes: pubKeyByte })
     let data = { credentialId: crednBytes, publicKeyBytes: pubKeyByte };
+    console.log(data);
     return data
   } catch (err) {
     console.log(err);
@@ -113,21 +116,123 @@ export const RegisterAuth = async (docid, fullname) => {
 }
 
 export const LoginAuth = async () => {
+  try {
+    let nuxt = useNuxtApp();
+    let crud = nuxt.$crud;
+    let store = useLoungeStore()
+    const res = await crud.getSingleDoc('USERS', store.activeUser);
+    let userData = res.data()
+    const { credentialId, publicKeyBytes } = userData
+    console.log(credentialId, publicKeyBytes);
+    let cred = base64ToArrayBuffer(credentialId)
+    const publicKeyCredentialRequestOptions = {
+      challenge: Uint8Array.from(
+        Math.floor('MASF' + Math.random() * 26836903203).toString(), c => c.charCodeAt(0)),
+      allowCredentials: [{
+        id: cred,
+        type: 'public-key',
+        transports: ['internals'],
+      }],
+      timeout: 60000,
+    }
+    const assertion = await navigator.credentials.get({
+      publicKey: publicKeyCredentialRequestOptions
+    });
+    const utf8Decoder = new TextDecoder('utf-8');
+    const decodedClientData = utf8Decoder.decode(
+      assertion.response.clientDataJSON)
+    const clientDataObj = JSON.parse(decodedClientData);
+    console.log(assertion)
+    if (assertion.rawId) {
+      console.log("Hooray! User is authenticated! 🎉");
+      return {
+        status: true, credentialId: credentialId
+      }
+    } else {
+      console.log("Verification failed. 😭");
+      return { status: false }
+    }
+  } catch (err) {
+    console.log(err)
+    return { status: false, ...err }
+
+  }
 }
 
 export const DeleteAuth = async (docid) => {
 }
 
 export const arrayBufferToBase64 = (buffer) => {
+  const binaryString = String.fromCharCode.apply(
+    null,
+    new Uint8Array(buffer)
+  );
+  return btoa(binaryString);
 }
 
 export const base64ToArrayBuffer = (base64) => {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
 }
 
 export const base64ToUint8Array = (base64) => {
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
 }
 
 export const importPublicKey = async (publicKeyBytes) => {
+  try {
+    const algorithm = {
+      name: "ECDSA",
+      namedCurve: "P-256" // This is for ES256 (ECDSA using P-256)
+    };
+
+    const key = await window.crypto.subtle.importKey(
+      "raw",                // format of the key to import
+      publicKeyBytes.buffer,       // the actual key data
+      algorithm,            // the algorithm the key will be used with
+      true,                 // whether the key is extractable (i.e. can be exported)
+      ["verify"]            // what this key can do
+    );
+
+    return key;
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+
+}
+
+export const verifySignature = async (publicKey, signature, signedData) => {
+  try {
+    const algorithm = {
+      name: "ECDSA",
+      hash: { name: "SHA-256" },
+    };
+
+    const isValid = await window.crypto.subtle.verify(
+      algorithm,             // algorithm to use for verification
+      publicKey,             // the public key to use for verification
+      signature,             // the signature to verify
+      signedData             // the data that was signed
+    );
+
+    return isValid;
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+
 }
 
 function RouteUser(usertype, router) {

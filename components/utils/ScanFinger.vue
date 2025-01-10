@@ -44,110 +44,19 @@ export default {
     loading: false,
   }),
   methods: {
-    async Register() {
-      this.loading = true;
-      let opts;
-      const { browserSupportsWebAuthn, startRegistration } =
-        SimpleWebAuthnBrowser;
-      const resp = await fetch(
-        'https://evotingapi.onrender.com/generate-registration-options'
-      );
-
-      let attResp;
-      try {
-        opts = await resp.json();
-        attResp = await startRegistration(opts);
-        console.log(attResp);
-      } catch (error) {
-        if (error.name === 'InvalidStateError') {
-          ShowSnack('Already Authnticated', 'negative');
-        } else {
-          ShowSnack('Error Occured', 'negative');
-        }
-        this.loading = false;
-
-        throw error;
-      }
-      const verificationResp = await fetch(
-        'https://evotingapi.onrender.com/verify-registration',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...attResp,
-            currentChallenge: opts.challenge,
-          }),
-        }
-      );
-
-      const verificationJSON = await verificationResp.json();
-
-      if (verificationJSON && verificationJSON.verified) {
-        await crud.updateDocument('USERS', this.activeUser, {
-          biometrics: {
-            scan1Uri: attResp.id,
-            url: attResp.id,
-            path: attResp.id,
-          },
-        });
-        ShowSnack('Validation Successfull', 'positive');
-        this.$router.push({ path: '/elections' });
-      } else {
-        ShowSnack('Not Aunticated', 'negative');
-      }
-      this.loading = false;
-    },
+  
     async Login() {
-      const { startAuthentication } = SimpleWebAuthnBrowser;
-      let opts;
-      const resp = await fetch(
-        'https://evotingapi.onrender.com/generate-authentication-options'
-      );
-      let asseResp;
-      try {
-        opts = await resp.json();
-
-        asseResp = await startAuthentication(opts);
-
-        console.log(asseResp);
-      } catch (error) {
-        throw new Error(error);
-      }
-
-      const verificationResp = await fetch(
-        'https://evotingapi.onrender.com/verify-authentication',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...asseResp,
-            currentChallenge: opts.challenge,
-          }),
-        }
-      );
-
-      const verificationJSON = await verificationResp.json();
-      console.log(verificationJSON);
-      if (verificationJSON && verificationJSON.verified) {
-       
-        const user = await crud.getAllQueryDoc('USERS', 'biofin', asseResp.id);
       
-        if (user.length > 0 && user[0].biofin == asseResp.id) {
+       const res = await LoginAuth()
+        if (res.status) {
           store.SetScan(true);
-          store.SetFinger(asseResp.id);
+          store.SetFinger(res.credentialId);
           ShowSnack('User Verified', 'positive');
           this.$router.push({ path: '/elections' });
         } else {
           ShowSnack('Active User Not Verified', 'negative');
         }
-      } else {
-        ShowSnack('Unverified', 'negative');
-        ShowSnack('User Not Verified', 'negative');
-      }
+     
     },
   },
 

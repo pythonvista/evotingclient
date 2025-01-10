@@ -3,7 +3,7 @@
     <p class="text-xl font-serif font-bold text-center">
       Fingerprint Verification Enrollment
     </p>
-
+    {{ userData }}
     <div
       @click="EnableFinger"
       class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
@@ -33,6 +33,9 @@ export default {
     activeUser() {
       return store.activeUser;
     },
+    userData() {
+      return store.userData;
+    },
   },
   created() {
     let nuxt = useNuxtApp();
@@ -46,65 +49,29 @@ export default {
   methods: {
     async Register() {
       this.loading = true;
-      let opts;
-      const { browserSupportsWebAuthn, startRegistration } =
-        SimpleWebAuthnBrowser;
-      const resp = await fetch(
-        'https://evotingapi.onrender.com/generate-registration-options'
-      );
-
-      let attResp;
-      try {
-        opts = await resp.json();
-        attResp = await startRegistration(opts);
-        console.log(attResp);
-      } catch (error) {
-        if (error.name === 'InvalidStateError') {
-          ShowSnack('Already Authnticated', 'negative');
-        } else {
-          ShowSnack('Error Occured', 'negative');
-        }
-        this.loading = false;
-
-        throw error;
-      }
-      const verificationResp = await fetch(
-        'https://evotingapi.onrender.com/verify-registration',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...attResp,
-            currentChallenge: opts.challenge,
-          }),
-        }
-      );
-
-      const verificationJSON = await verificationResp.json();
-
-      if (verificationJSON && verificationJSON.verified) {
-        await crud.updateDocument('USERS', this.activeUser, {
+      const data = await RegisterAuth(this.activeUser, this.activeUser);
+      if (data.credentialId) {
+        await crud.updateDocument("USERS", this.activeUser, {
           biometrics: {
-            scan1Uri: attResp.id,
-            url: attResp.id,
-            path: attResp.id,
+            scan1Uri: data.credentialId,
+            url: data.credentialId,
+            path: data.credentialId,
           },
-          biofin: attResp.id
+          biofin: data.credentialId,
         });
-        ShowSnack('Validation Successfull', 'positive');
-        this.$router.push({ path: '/elections' });
+        ShowSnack("Validation Successfull", "positive");
+        this.$router.push({ path: "/elections" });
+         this.loading = false;
       } else {
-        ShowSnack('Not Aunticated', 'negative');
+        ShowSnack("Not Aunticated", "negative");
+        this.loading = false;
       }
-      this.loading = false;
     },
     async Login() {
       const { startAuthentication } = SimpleWebAuthnBrowser;
       let opts;
       const resp = await fetch(
-        'https://evotingapi.onrender.com/generate-authentication-options'
+        "https://evotingapi.onrender.com/generate-authentication-options"
       );
       let asseResp;
       try {
@@ -118,11 +85,11 @@ export default {
       }
 
       const verificationResp = await fetch(
-        'https://evotingapi.onrender.com/verify-authentication',
+        "https://evotingapi.onrender.com/verify-authentication",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             ...asseResp,
@@ -134,28 +101,28 @@ export default {
       const verificationJSON = await verificationResp.json();
       console.log(verificationJSON);
       if (verificationJSON && verificationJSON.verified) {
-        ShowSnack('Verified', 'positive');
+        ShowSnack("Verified", "positive");
       } else {
-        ShowSnack('Unverified', 'negative');
+        ShowSnack("Unverified", "negative");
       }
     },
   },
 
   mounted() {
     const { startAuthentication = StartAunth } = SimpleWebAuthnBrowser;
-    fetch('https://evotingapi.onrender.com/generate-authentication-options')
+    fetch("https://evotingapi.onrender.com/generate-authentication-options")
       .then((resp) => resp.json())
       .then((opts) => {
-        console.log('Authentication Options (Autofill)', opts);
+        console.log("Authentication Options (Autofill)", opts);
         startAuthentication(opts, true)
           .then(async (asseResp) => {
             // We can assume the DOM has loaded by now because it had to for the user to be able
             // to interact with an input to choose a credential from the autofill
 
-            const verificationResp = await fetch('/verify-authentication', {
-              method: 'POST',
+            const verificationResp = await fetch("/verify-authentication", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify(asseResp),
             });
@@ -163,13 +130,13 @@ export default {
             const verificationJSON = await verificationResp.json();
 
             if (verificationJSON && verificationJSON.verified) {
-              ShowSnack('User authenticated!');
+              ShowSnack("User authenticated!");
             } else {
-              ShowSnack('Oh no, something went wrong! Response');
+              ShowSnack("Oh no, something went wrong! Response");
             }
           })
           .catch((err) => {
-            console.error('(Autofill)', err);
+            console.error("(Autofill)", err);
           });
       });
   },
