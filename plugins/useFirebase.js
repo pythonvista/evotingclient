@@ -39,12 +39,12 @@ import {
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const firebaseConfig = {
-    apiKey: 'AIzaSyDiweJPAg6rqRU5B37sCFh9G-FKQV9PNqQ',
-    authDomain: 'medfestcare-5f2be.firebaseapp.com',
-    projectId: 'medfestcare-5f2be',
-    storageBucket: 'medfestcare-5f2be.firebasestorage.app',
-    messagingSenderId: '563387407605',
-    appId: '1:563387407605:web:259a1c34575294443eb9bc',
+    apiKey: 'AIzaSyATjvn826gQdqAP0SCxmx13vGYQMYCwTec',
+    authDomain: 'chelseahub-fe16d.firebaseapp.com',
+    projectId: 'chelseahub-fe16d',
+    storageBucket: 'chelseahub-fe16d.appspot.com',
+    messagingSenderId: '572875901073',
+    appId: '1:572875901073:web:44d159d94cbfe3f1945730',
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
