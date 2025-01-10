@@ -14,7 +14,7 @@ export const apiClient = async (route, method, body) => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Subscriptionkey: '8yDj7rvD2GkIQdA5x0-HDOcgfCkgs1685',
+          Subscriptionkey: '2Ld07Q6sjPUJWPvnir-O4qb72XOCw3393',
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
