@@ -81,7 +81,9 @@
           <q-select
           emit-value
           label="Select Election"
+
           :options="allElection.map((m) => ({label: `${m.id} ${m.title}`, value: m.id} ))"
+
          class="w-full"
           v-model="polls.electionid"
         ></q-select>
@@ -117,7 +119,9 @@
         <q-select
           label="Select Pools"
           emit-value
+
           :options="allPools.map((m) => ({label: `${m.id} ${m.title}`, value: m.id}))"
+
           class="w-full"
           v-model="contestant.pollsid"
         ></q-select>
