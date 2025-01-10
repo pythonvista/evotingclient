@@ -1,5 +1,8 @@
 
 let store;
+import CryptoJS from 'crypto-js';
+import pkg from "cbor-js";
+const { decode } = pkg
 export const AuthHandler = async (id, router) => {
   let nuxt = useNuxtApp();
   store = useLoungeStore();
@@ -28,6 +31,104 @@ export const AuthHandlerMini = async (id) => {
     console.log(err);
   }
 };
+export const GetWebAuth = async () => {
+  try {
+    let nuxt = useNuxtApp()
+    let axios = nuxt.$UseAxios
+    let userCred = TokenGetter();
+    const res = await axios.get(`/passcode?id=${userCred.uid}`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: userCred.token,
+      },
+    });
+    let data = res.data;
+    return data
+  } catch (err) {
+    console.log(err)
+    return { status: false, ...err }
+  }
+}
+export const RegisterAuth = async (docid, fullname) => {
+  try {
+    let nuxt = useNuxtApp();
+    let crud = nuxt.$crud;
+    const publicKeyCredentialCreationOptions = {
+      challenge: Uint8Array.from(
+        "MMSA" + Math.floor(Math.random() * 212932093).toString(),
+        (c) => c.charCodeAt(0)
+      ),
+      rp: {
+        name: "evotingclient.vercel.app",
+        id: "evotingclient.vercel.app",
+      },
+      user: {
+        id: Uint8Array.from(docid, (c) => c.charCodeAt(0)),
+        name: fullname,
+        displayName: fullname,
+      },
+      pubKeyCredParams: [
+        { alg: -7, type: "public-key" }, // ES256
+      ],
+      authenticatorSelection: {
+        authenticatorAttachment: "platform",
+      },
+      timeout: 60000,
+      attestation: "direct",
+    };
+    const credential = await navigator.credentials.create({
+      publicKey: publicKeyCredentialCreationOptions,
+    });
+    // decode the clientDataJSON into a utf-8 string
+    const utf8Decoder = new TextDecoder("utf-8");
+    const decodedClientData = utf8Decoder.decode(
+      credential.response.clientDataJSON
+    );
+    // parse the string as an object
+    const clientDataObj = JSON.parse(decodedClientData);
+    const attestationObject = new Uint8Array(
+      credential.response.attestationObject
+    );
+    const decodedAttestationObj = await decode(attestationObject.buffer);
+
+    const { authData } = decodedAttestationObj;
+    // get the length of the credential ID
+    const dataView = new DataView(new ArrayBuffer(2));
+    const idLenBytes = authData.slice(53, 55);
+    idLenBytes.forEach((value, index) => dataView.setUint8(index, value));
+    const credentialIdLength = dataView.getUint16();
+    // get the credential ID
+    const credentialId = authData.slice(55, 55 + credentialIdLength);
+    // get the public key object
+    const publicKeyBytes = authData.slice(55 + credentialIdLength);
+    let crednBytes = arrayBufferToBase64(credentialId);
+    let pubKeyByte = arrayBufferToBase64(publicKeyBytes);
+    await crud.updateDocument('USERS', docid, { credentialId: crednBytes, publicKeyBytes: pubKeyByte })
+    let data = { credentialId: crednBytes, publicKeyBytes: pubKeyByte };
+    return data
+  } catch (err) {
+    console.log(err);
+    return { status: false, ...err }
+  }
+}
+
+export const LoginAuth = async () => {
+}
+
+export const DeleteAuth = async (docid) => {
+}
+
+export const arrayBufferToBase64 = (buffer) => {
+}
+
+export const base64ToArrayBuffer = (base64) => {
+}
+
+export const base64ToUint8Array = (base64) => {
+}
+
+export const importPublicKey = async (publicKeyBytes) => {
+}
 
 function RouteUser(usertype, router) {
   switch (usertype) {
