@@ -3,7 +3,7 @@
     <p class="text-xl font-serif font-bold text-center">
       Fingerprint Verification Enrollment
     </p>
-    {{ userData }}
+ 
     <div
       @click="EnableFinger"
       class="h-20 w-20 cursor-pointer bg-white shadow-md rounded-md"
